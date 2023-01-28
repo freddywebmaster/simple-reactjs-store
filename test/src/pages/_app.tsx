@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import type { AppProps } from 'next/app';
-import { SimpleRootStore } from 'simple-reactjs-store';
 import { store } from '../store';
+import { SimpleRootStore } from '../freddyLib';
 
 export default function App({ Component, pageProps }: AppProps) {
   return (

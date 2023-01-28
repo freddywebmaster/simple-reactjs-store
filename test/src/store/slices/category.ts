@@ -1,4 +1,4 @@
-import { createSlice } from 'simple-reactjs-store';
+import { createSlice } from '../../freddyLib';
 
 interface Category {
   name: string;
@@ -6,17 +6,33 @@ interface Category {
   id: string;
 }
 
+interface CategoryState {
+  categories: Category[];
+  isLoading: boolean;
+}
+
+const initialState: CategoryState = {
+  categories: [],
+  isLoading: false,
+};
+
 export const categorySlice = createSlice({
   name: 'categories',
-  initialState: [] as Category[],
+  initialState,
   actions: {
     getCategories: async function (state, setState) {
-      const res = await fetch('http://localhost:8080/categories')
-      const data = await res.json();
-      setState && setState(data);
+      try {
+        setState({ ...state, isLoading: true });
+        const res = await fetch('http://localhost:8080/categories');
+
+        const data = await res.json();
+        return { categories: data, isLoading: false };
+      } catch (error) {
+        console.log(error);
+        return { ...state, isLoading: false };
+      }
     },
   },
 });
 
-//@ts-ignore
 export const { getCategories } = categorySlice.actions;
