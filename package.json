@@ -1,6 +1,6 @@
 {
   "name": "simple-reactjs-store",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Simple react store using contextAPI",
   "main": "./dist",
   "types": "./dist/index.d.ts",
@@ -14,21 +14,20 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/freddywebmaster/simple-react-store.git"
+    "url": "git+https://github.com/freddywebmaster/simple-reactjs-store.git"
   },
   "author": "freddywebmaster",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/freddywebmaster/simple-react-store/issues"
+    "url": "https://github.com/freddywebmaster/simple-reactjs-store/issues"
   },
-  "homepage": "https://github.com/freddywebmaster/simple-react-store#readme",
+  "homepage": "https://github.com/freddywebmaster/simple-reactjs-store#readme",
   "devDependencies": {
     "@types/react": "^18.0.6",
     "prettier": "^2.6.2",
     "typescript": "^4.6.3"
   },
   "dependencies": {
-    "firebase": "9.15.0",
     "react": "^18.0.0"
   }
 }
