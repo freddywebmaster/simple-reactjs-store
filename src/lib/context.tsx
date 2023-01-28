@@ -2,9 +2,14 @@ import React, { createContext, useState } from 'react';
 
 export const RootContext = createContext<any>({});
 
-interface RootElement<Element> {
+interface Actions {
+  [index: string]: <P>(state: Element, set?: (newData: Element) => void, payload?: P) => void;
+}
+
+export interface RootElement<Element> {
   name: string;
   initialState: Element;
+  actions?: Actions;
 }
 
 export function SimpleRootStore<RootStore>(props: { children: JSX.Element; store: RootElement<RootStore>[] }) {

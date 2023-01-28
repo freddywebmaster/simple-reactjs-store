@@ -9,9 +9,13 @@ function useSimpleState(slice) {
     function setData(newValue) {
         ctx === null || ctx === void 0 ? void 0 : ctx.dispatch(Object.assign(Object.assign({}, ctx.root), { [slice.name]: newValue }));
     }
+    function execute(action, payload) {
+        action(ctx.root[slice.name], setData, payload);
+    }
     return {
         data: ctx.root[slice.name],
         set: setData,
+        exec: execute,
     };
 }
 exports.useSimpleState = useSimpleState;

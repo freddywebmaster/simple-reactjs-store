@@ -1,0 +1,7 @@
+{
+  "categories": [
+    { "id": 0, "name": "Category one", "Description": "of category one" },
+    { "id": 1, "name": "Category two", "Description": "of category two" }
+  ],
+  "books": []
+}
