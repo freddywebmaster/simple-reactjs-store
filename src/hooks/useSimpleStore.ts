@@ -9,8 +9,12 @@ export function useSimpleState<T>(slice: RootElement<T>) {
     ctx?.dispatch({ ...ctx.root, [slice.name]: newValue });
   }
 
-  function execute<P>(action: (state: T, set: (newData: T) => void, payload?: P) => any, payload?: P) {
-    action(ctx.root[slice.name], setData, payload);
+  async function execute<P>(
+    action: <P>(state: T, set: (newValue: T) => void, payload: P) => T | Promise<T>,
+    payload?: P,
+  ) {
+    const res = await action(ctx.root[slice.name], setData, payload);
+    setData(res);
   }
 
   return {
