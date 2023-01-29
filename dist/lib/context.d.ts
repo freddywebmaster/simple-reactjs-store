@@ -1,14 +1,13 @@
 import React from 'react';
-export declare const RootContext: React.Context<any>;
-export interface Actions<T> {
-    [index: string]: (state: T, set: (data: T) => void | Promise<T>, payload?: any) => T;
-}
-export interface RootElement<SliceData> {
-    name: string;
-    initialState: SliceData;
-    actions?: Actions<SliceData>;
-}
-export declare function SimpleRootStore(props: {
+import { FullSlice } from '../hooks/useSimpleStore';
+import { SubjectManager } from './subject-manager';
+export declare const subjectMounted: SubjectManager;
+export declare const RootContext: React.Context<{
+    root: any;
+    store: any;
+    mounted: string[];
+}>;
+export declare function SimpleStateProvider(props: {
     children: JSX.Element;
-    store: RootElement<any>[];
+    store: FullSlice<any>[];
 }): JSX.Element;

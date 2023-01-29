@@ -1,3 +1,3 @@
-export { SimpleRootStore } from './lib/context';
-export { createSlice } from './lib/createSlice';
-export { useSimpleState } from './hooks';
+export { SimpleStateProvider } from './lib/context';
+export { CreateSlice } from './lib/createSlice';
+export { useSimpleStore } from './hooks';

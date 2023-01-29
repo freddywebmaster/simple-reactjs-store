@@ -1,33 +1,41 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.useSimpleState = void 0;
-/* eslint-disable react-hooks/exhaustive-deps */
+exports.useSimpleStore = void 0;
 const react_1 = require("react");
 const context_1 = require("../lib/context");
-function useSimpleState(slice) {
-    const ctx = (0, react_1.useContext)(context_1.RootContext);
-    function setData(newValue) {
-        ctx === null || ctx === void 0 ? void 0 : ctx.dispatch(Object.assign(Object.assign({}, ctx.root), { [slice.name]: newValue }));
-    }
-    function execute(action, payload) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const res = yield action(ctx.root[slice.name], setData, payload);
-            setData(res);
+const useLocalStorage_1 = __importDefault(require("./useLocalStorage"));
+function useSimpleStore(slice) {
+    var _a;
+    const rootCtx = (0, react_1.useContext)(context_1.RootContext);
+    const useCache = (_a = slice.slice.config) === null || _a === void 0 ? void 0 : _a.useLocalStorageCache;
+    const [cache, setCache] = (0, useLocalStorage_1.default)(slice.slice.name, slice.slice.initialState);
+    const [state, setState] = (0, react_1.useState)(slice.slice.initialState);
+    (0, react_1.useEffect)(() => {
+        const subs = slice.store.subscribe((data) => {
+            if (useCache === true && rootCtx.mounted.includes(slice.slice.name)) {
+                setCache(data);
+            }
+            if (!useCache) {
+                setState(data);
+            }
+            rootCtx.root({
+                type: 'UPDATE_STORE',
+                payload: {
+                    [slice.slice.name]: data,
+                },
+            });
         });
-    }
+        if (!rootCtx.mounted.includes(slice.slice.name)) {
+            context_1.subjectMounted.setSubject(slice.slice.name);
+        }
+        return () => subs.unsubscribe();
+    }, []);
     return {
-        data: ctx.root[slice.name],
-        set: setData,
-        exec: execute,
+        data: useCache ? cache : state,
+        dispatch: slice.store.dispatch,
     };
 }
-exports.useSimpleState = useSimpleState;
+exports.useSimpleStore = useSimpleStore;

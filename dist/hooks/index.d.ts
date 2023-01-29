@@ -1,1 +1,1 @@
-export { useSimpleState } from './useSimpleStore';
+export { useSimpleStore } from './useSimpleStore';

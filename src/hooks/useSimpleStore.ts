@@ -1,25 +1,50 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useContext } from 'react';
-import { RootContext, RootElement } from '../lib/context';
+import { useContext, useEffect, useState } from 'react';
+import { RootContext, subjectMounted } from '../lib/context';
+import { Slice } from '../lib/createSlice';
+import { Store } from '../lib/store';
+import useLocalStorage from './useLocalStorage';
 
-export function useSimpleState<T>(slice: RootElement<T>) {
-  const ctx = useContext(RootContext);
+export interface FullSlice<T> {
+  store: Store<T>;
+  slice: Slice<T>;
+}
 
-  function setData(newValue: T) {
-    ctx?.dispatch({ ...ctx.root, [slice.name]: newValue });
-  }
+export function useSimpleStore<T>(slice: FullSlice<T>) {
+  const rootCtx = useContext(RootContext);
 
-  async function execute<P>(
-    action: <P>(state: T, set: (newValue: T) => void, payload: P) => T | Promise<T>,
-    payload?: P,
-  ) {
-    const res = await action(ctx.root[slice.name], setData, payload);
-    setData(res);
-  }
+  const useCache = slice.slice.config?.useLocalStorageCache;
+
+  const [cache, setCache] = useLocalStorage(slice.slice.name, slice.slice.initialState);
+
+  const [state, setState] = useState<T>(slice.slice.initialState);
+
+  useEffect(() => {
+    const subs = slice.store.subscribe((data) => {
+      if (useCache === true && rootCtx.mounted.includes(slice.slice.name)) {
+        setCache(data);
+      }
+
+      if (!useCache) {
+        setState(data);
+      }
+
+      rootCtx.root({
+        type: 'UPDATE_STORE',
+        payload: {
+          [slice.slice.name]: data,
+        },
+      });
+    });
+
+    if (!rootCtx.mounted.includes(slice.slice.name)) {
+      subjectMounted.setSubject(slice.slice.name);
+    }
+
+    return () => subs.unsubscribe();
+  }, []);
 
   return {
-    data: ctx.root[slice.name] as T,
-    set: setData,
-    exec: execute,
+    data: useCache ? (cache as T) : state,
+    dispatch: slice.store.dispatch,
   };
 }

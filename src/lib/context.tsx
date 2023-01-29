@@ -1,33 +1,70 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
+import { CreateSlice } from './createSlice';
+import { useRoot } from '../hooks/useRoot';
+import { FullSlice } from '../hooks/useSimpleStore';
+import { SubjectManager } from './subject-manager';
 
-export const RootContext = createContext<any>({});
+const rootSlice = CreateSlice({
+  name: 'Root',
+  initialState: {} as any,
+  reducer(state, action) {
+    switch (action.type) {
+      case 'INIT_LOAD_STATES':
+        return action.payload;
+      case 'UPDATE_STORE':
+        return { ...state, ...action.payload };
+      default:
+        return state;
+    }
+  },
+});
 
-export interface Actions<T> {
-  [index: string]: (state: T, set: (data: T) => void | Promise<T>, payload?: any) => T;
-}
+export const subjectMounted = new SubjectManager();
 
-export interface RootElement<SliceData> {
-  name: string;
-  initialState: SliceData;
-  actions?: Actions<SliceData>;
-}
+export const RootContext = createContext({
+  root: {} as any,
+  store: {} as any,
+  mounted: [] as string[],
+});
 
-export function SimpleRootStore(props: { children: JSX.Element; store: RootElement<any>[] }) {
-  const initialState = () => {
-    let final: any = {};
-    props.store.map((el) => {
-      final[el.name] = el.initialState;
+export function SimpleStateProvider(props: { children: JSX.Element; store: FullSlice<any>[] }) {
+  const { data, dispatch } = useRoot(rootSlice);
+
+  const [mounted, setMounted] = useState<string[]>([]);
+
+  const generateInitialState = () => {
+    let stateResult: any = {};
+
+    props.store.map((stateElement) => {
+      const useCache = stateElement.slice.config?.useLocalStorageCache;
+
+      stateResult[stateElement.slice.name] = useCache
+        ? JSON.parse(localStorage.getItem(stateElement.slice.name) || '')
+        : stateElement.slice.initialState;
     });
-    return final;
+
+    dispatch({ type: 'INIT_LOAD_STATES', payload: stateResult });
   };
 
-  const [state, dispatch] = useState(() => initialState());
+  const mountSubject = subjectMounted.getSubject();
+
+  useEffect(() => {
+    RootContext.displayName = 'SIMPLE_REACT_STORE';
+    generateInitialState();
+
+    mountSubject.subscribe((data) => {
+      if (mounted.includes(data as string)) return;
+
+      setMounted([...mounted, data as string]);
+    });
+  }, []);
 
   return (
     <RootContext.Provider
       value={{
-        root: state,
-        dispatch,
+        root: dispatch,
+        store: data,
+        mounted,
       }}
     >
       {props.children}
