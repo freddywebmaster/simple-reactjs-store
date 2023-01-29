@@ -2,6 +2,8 @@
 
 A library to implement global state with contextApi.
 
+`PLEASE DON'T INSTALL THIS SH**T`, i created this only for hobbie :)
+
 ## Instalation
 
 `npm i simple-reactjs-store`

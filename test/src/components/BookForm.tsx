@@ -1,16 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { useSimpleState } from '../freddyLib';
+import { useSimpleState } from 'simple-reactjs-store';
 import { categorySlice, getCategories } from '../store/slices/category';
 
 const BookForm = () => {
-  //init the hook with your state
   const categoryState = useSimpleState(categorySlice);
-  //if your state is big you can desctructure data
   const { categories, isLoading } = categoryState.data;
 
   useEffect(() => {
-    //On Init this component execute the action only pass the action... Don't call your FN
     categoryState.exec(getCategories);
   }, []);
 

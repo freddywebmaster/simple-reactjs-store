@@ -1,4 +1,4 @@
-import { createSlice } from '../../freddyLib';
+import { createSlice } from 'simple-reactjs-store';
 
 interface Category {
   name: string;
@@ -24,7 +24,6 @@ export const categorySlice = createSlice({
       try {
         setState({ ...state, isLoading: true });
         const res = await fetch('http://localhost:8080/categories');
-
         const data = await res.json();
         return { categories: data, isLoading: false };
       } catch (error) {

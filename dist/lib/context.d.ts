@@ -1,14 +1,14 @@
 import React from 'react';
 export declare const RootContext: React.Context<any>;
 export interface Actions<T> {
-    [index: string]: <P>(state: T, set: (data: T) => T | Promise<T>, payload?: P) => void;
+    [index: string]: (state: T, set: (data: T) => void | Promise<T>, payload?: any) => T;
 }
-export interface RootElement<RE> {
+export interface RootElement<SliceData> {
     name: string;
-    initialState: RE;
-    actions?: Actions<RE>;
+    initialState: SliceData;
+    actions?: Actions<SliceData>;
 }
-export declare function SimpleRootStore<RootStore>(props: {
+export declare function SimpleRootStore(props: {
     children: JSX.Element;
-    store: RootElement<RootStore>[];
+    store: RootElement<any>[];
 }): JSX.Element;
