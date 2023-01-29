@@ -1,25 +1,26 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
 import { useSimpleState } from 'simple-reactjs-store';
-import { getProducts, productSlice } from '../store/slices/product';
+import { getBooks, bookSlice } from '../store/slices/book';
 
 const BookList = () => {
-  const productState = useSimpleState(productSlice);
-  const { products, isLoading } = productState.data;
+  const bookState = useSimpleState(bookSlice);
+  const { books, isLoading } = bookState.data;
 
   useEffect(() => {
-    productState.exec(getProducts);
+    bookState.exec(getBooks);
   }, []);
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-md">
-      <h2>Book list</h2>
+    <div className="bg-white p-4 rounded-xl shadow-md hover:shadow-2xl">
+      <h2 className='font-bold text-2xl mb-2 text-gray-700 text-center'>Book list</h2>
 
       {isLoading ? (
-        <p>cloading products...</p>
+        <p>loading products...</p>
       ) : (
-        products.map((product) => (
-          <div key={product.id}>
-            <p>{product.name}</p>
+        books.map((book) => (
+          <div key={book.id}>
+            <p>{book.name}</p>
           </div>
         ))
       )}

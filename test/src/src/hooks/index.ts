@@ -1,1 +1,0 @@
-export { useSimpleState } from './useSimpleStore';

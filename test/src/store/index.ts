@@ -1,4 +1,4 @@
 import { categorySlice } from "./slices/category";
-import { productSlice } from "./slices/product";
+import { bookSlice } from "./slices/book";
 
-export const store = [categorySlice, productSlice];
+export const store = [categorySlice, bookSlice];

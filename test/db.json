@@ -1,7 +1,34 @@
 {
   "categories": [
-    { "id": 0, "name": "Category one", "Description": "of category one" },
-    { "id": 1, "name": "Category two", "Description": "of category two" }
+    {
+      "id": 0,
+      "name": "Category one",
+      "Description": "of category one"
+    },
+    {
+      "id": 1,
+      "name": "Category two",
+      "Description": "of category two"
+    }
   ],
-  "books": []
+  "books": [
+    {
+      "name": "book one",
+      "image": "image",
+      "category": "0",
+      "id": 1
+    },
+    {
+      "name": "book two",
+      "image": "image",
+      "category": "1",
+      "id": 2
+    },
+    {
+      "name": "hola",
+      "image": "ssss",
+      "category": "1",
+      "id": 3
+    }
+  ]
 }
