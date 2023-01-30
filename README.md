@@ -10,6 +10,10 @@
 
 - [0.0.1 to 0.0.17](./oldDocs/0.0.17.md)
 
+## Why?
+
+On many occasions you have small project ideas, I have implemented a `contextApi` architecture, Redux, Zuztand, Etc, it takes a long time sometimes, `Recoil` is a solution but from my point of view I have had many problems using it...
+
 ## Instalation
 
 `npm i simple-reactjs-store`
@@ -71,6 +75,43 @@ export const userSlice = CreateSlice({
 });
 ```
 
+## Full Example of `slice` with `typescript`
+
+- Cache in localstorage is `Experimental`.
+
+```jsx
+import { CreateSlice } from "simple-reactjs-store";
+
+export interface Product {
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+}
+
+//The best practice is create a constants for your actions but you are free to do what you want
+export const PRODUCT_ACTIONS = {
+  ADD_PRODUCT: "ADD_PRODUCT",
+  DELETE_PRODUCT: "DELETE_PRODUCT",
+};
+
+export const productStore = CreateSlice({
+  name: "products",
+  initialState: [] as Product[], //you can define the state you want
+  config: { useLocalStorageCache: true }, //CACHE STORAGE (EXPERIMENTAL)
+  reducer(state, action) {
+    switch (action.type) {
+      case PRODUCT_ACTIONS.ADD_PRODUCT:
+        return [...state, action.payload];
+      case PRODUCT_ACTIONS.DELETE_PRODUCT:
+        return state.filter((product) => product.name !== action.payload);
+      default:
+        return state;
+    }
+  },
+});
+```
+
 ### 2. Define a `GlobalProvider` in your App.js
 
 The store props receive an `Array` of `Slices`
@@ -82,16 +123,48 @@ import { userState } from 'store/user';
 
 export default function App({ Component, pageProps }) {
   return (
-    <SimpleStateProvider store={(productState, userState)}>
+    <SimpleStateProvider store={[productState, userState]}>
       <Component {...pageProps} />
     </SimpleStateProvider>
   );
 }
 ```
 
-## Usage
+## Store management
 
 To start using your state, you just have to import the hook `useSimpleStore` and pass it the state you want to use.
+
+```jsx
+const { data, dispatch, asyncDispatch } = useSimpleStore(productStore);
+```
+
+- You can use `data` to access to all data of store
+
+```jsx
+console.log(data)
+
+data.map((product, i) => (
+  <div key={i}>
+    <p>{product.name}</p>
+  </div>
+));
+```
+
+- You can use `dispatch` to execute acction and pass a payload;
+
+```jsx
+dispatch({
+  type: 'ADD_PRODUCT', //Type of your action definition in slice
+  payload: {
+    name: 'TV Smart',
+    description: 'This product will be saved in store',
+  },
+});
+```
+
+- You can use `asyncDispatch` to promises
+
+## Basic Example
 
 ```jsx
 import { useSimpleStore } from 'simple-reactjs-store';
@@ -130,51 +203,3 @@ const ProductList = () => {
 
 export default ProductList;
 ```
-
-## Full Example of `slice` with `typescript`
-
-- Cache in localstorage is `Experimental` but work fine, if you detect a problems please report in github :)
-
-```jsx
-import { CreateSlice } from "simple-reactjs-store";
-
-export interface Product {
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-}
-
-//The best practice is create a constants for your actions but you are free to do what you want
-export const PRODUCT_ACTIONS = {
-  ADD_PRODUCT: "ADD_PRODUCT",
-  DELETE_PRODUCT: "DELETE_PRODUCT",
-};
-
-export const productStore = CreateSlice({
-  name: "products",
-  initialState: [] as Product[], //you can define the state you want
-  config: { useLocalStorageCache: true }, //CACHE STORAGE (EXPERIMENTAL)
-  reducer(state, action) {
-    switch (action.type) {
-      case PRODUCT_ACTIONS.ADD_PRODUCT:
-        return [...state, action.payload];
-      case PRODUCT_ACTIONS.DELETE_PRODUCT:
-        return state.filter((product) => product.name !== action.payload);
-      default:
-        return state;
-    }
-  },
-});
-```
-
-# In next version =>
-
-- implement hook `useSimpleQuery` to fetch data;
-
-- More hooks to manage states ej: `useSimple Value`, `useAsyncAction`, many more :)
-
-- Suscriptions and observables very simple for the developer.
-
-- Thank you for read this.
-XD

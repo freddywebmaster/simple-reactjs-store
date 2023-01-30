@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import { CreateSlice } from './createSlice';
 import { useRoot } from '../hooks/useRoot';
 import { FullSlice } from '../hooks/useSimpleStore';
-import { SubjectManager } from './subject-manager';
+import { EventManager } from './subject-manager';
 
 const rootSlice = CreateSlice({
   name: 'Root',
@@ -19,7 +19,7 @@ const rootSlice = CreateSlice({
   },
 });
 
-export const subjectMounted = new SubjectManager();
+export const subjectMounted = new EventManager();
 
 export const RootContext = createContext({
   root: {} as any,
@@ -46,7 +46,7 @@ export function SimpleStateProvider(props: { children: JSX.Element; store: FullS
     dispatch({ type: 'INIT_LOAD_STATES', payload: stateResult });
   };
 
-  const mountSubject = subjectMounted.getSubject();
+  const mountSubject = subjectMounted.receive();
 
   useEffect(() => {
     RootContext.displayName = 'SIMPLE_REACT_STORE';

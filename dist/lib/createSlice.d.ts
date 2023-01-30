@@ -1,4 +1,4 @@
-import { Action, Store } from "./store";
+import { Action, Store } from './store';
 interface Config {
     useLocalStorageCache?: boolean;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FullSlice } from '../hooks/useSimpleStore';
-import { SubjectManager } from './subject-manager';
-export declare const subjectMounted: SubjectManager;
+import { EventManager } from './subject-manager';
+export declare const subjectMounted: EventManager<unknown>;
 export declare const RootContext: React.Context<{
     root: any;
     store: any;

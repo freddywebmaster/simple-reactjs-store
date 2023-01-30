@@ -42,7 +42,7 @@ const rootSlice = (0, createSlice_1.CreateSlice)({
         }
     },
 });
-exports.subjectMounted = new subject_manager_1.SubjectManager();
+exports.subjectMounted = new subject_manager_1.EventManager();
 exports.RootContext = (0, react_1.createContext)({
     root: {},
     store: {},
@@ -62,7 +62,7 @@ function SimpleStateProvider(props) {
         });
         dispatch({ type: 'INIT_LOAD_STATES', payload: stateResult });
     };
-    const mountSubject = exports.subjectMounted.getSubject();
+    const mountSubject = exports.subjectMounted.receive();
     (0, react_1.useEffect)(() => {
         exports.RootContext.displayName = 'SIMPLE_REACT_STORE';
         generateInitialState();

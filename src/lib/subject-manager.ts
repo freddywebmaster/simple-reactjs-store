@@ -1,15 +1,13 @@
-import { Subject } from "rxjs";
+import { Subject } from 'rxjs';
 
-export class SubjectManager {
+export class EventManager<T> {
   private subject$ = new Subject();
 
-  getSubject() {
+  receive() {
     return this.subject$.asObservable();
   }
 
-  setSubject<T>(value: T) {
+  emit(value: T) {
     this.subject$.next(value);
   }
 }
-
-export const sharingInfo = new SubjectManager();

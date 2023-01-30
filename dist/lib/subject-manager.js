@@ -1,17 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sharingInfo = exports.SubjectManager = void 0;
+exports.EventManager = void 0;
 const rxjs_1 = require("rxjs");
-class SubjectManager {
+class EventManager {
     constructor() {
         this.subject$ = new rxjs_1.Subject();
     }
-    getSubject() {
+    receive() {
         return this.subject$.asObservable();
     }
-    setSubject(value) {
+    emit(value) {
         this.subject$.next(value);
     }
 }
-exports.SubjectManager = SubjectManager;
-exports.sharingInfo = new SubjectManager();
+exports.EventManager = EventManager;
