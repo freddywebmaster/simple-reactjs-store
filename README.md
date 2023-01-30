@@ -141,7 +141,7 @@ const { data, dispatch, asyncDispatch } = useSimpleStore(productStore);
 - You can use `data` to access to all data of store
 
 ```jsx
-console.log(data)
+console.log(data);
 
 data.map((product, i) => (
   <div key={i}>
@@ -163,6 +163,23 @@ dispatch({
 ```
 
 - You can use `asyncDispatch` to promises
+
+```jsx
+await asyncDispatch(CATEGORY_ACTIONS.SET_CATEGORIES, getCategories);
+```
+
+- If you want set a loader in your promise...
+
+```jsx
+const loadCategories = async () => {
+  //you can use your store or useState... this is only example
+  dispatch({ type: CATEGORY_ACTIONS.SET_ISLOADING, payload: true });
+  //the promise need return the payload
+  await asyncDispatch(CATEGORY_ACTIONS.SET_CATEGORIES, getCategories);
+
+  dispatch({ type: CATEGORY_ACTIONS.SET_ISLOADING, payload: false });
+};
+```
 
 ## Basic Example
 
