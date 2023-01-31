@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useContext, useEffect, useState } from "react";
-import { RootContext, subjectMounted } from "../lib/context";
-import { Slice } from "../lib/createSlice";
-import { Store } from "../lib/store";
-import useLocalStorage from "./useLocalStorage";
+import { useContext, useEffect, useState } from 'react';
+import { RootContext, subjectMounted } from '../lib/context';
+import { Slice } from '../lib/createSlice';
+import { Store } from '../lib/store';
+import useLocalStorage from './useLocalStorage';
 
 export interface FullSlice<T> {
   store: Store<T>;
@@ -19,10 +19,7 @@ export function useSimpleStore<T>(slice: FullSlice<T>, config?: Config<T>) {
 
   const useCache = slice.slice.config?.useLocalStorageCache;
 
-  const [cache, setCache] = useLocalStorage(
-    slice.slice.name,
-    slice.slice.initialState
-  );
+  const [cache, setCache] = useLocalStorage(slice.slice.name, slice.slice.initialState);
 
   const [state, setState] = useState<T>(slice.slice.initialState);
 
@@ -42,13 +39,13 @@ export function useSimpleStore<T>(slice: FullSlice<T>, config?: Config<T>) {
 
       try {
         rootCtx.root({
-          type: "UPDATE_STORE",
+          type: 'UPDATE_STORE',
           payload: {
             [slice.slice.name]: data,
           },
         });
       } catch (error) {
-        alert("SimpleReactStore: Plase set a GlobalProvider!");
+        alert('SimpleReactStore: Plase set a GlobalProvider!');
       }
     });
 
@@ -63,5 +60,6 @@ export function useSimpleStore<T>(slice: FullSlice<T>, config?: Config<T>) {
     data: useCache ? (cache as T) : state,
     dispatch: slice.store.dispatch,
     asyncDispatch: slice.store.asyncDispatch,
+    select: slice.store.select,
   };
 }

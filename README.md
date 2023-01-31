@@ -150,6 +150,19 @@ data.map((product, i) => (
 ));
 ```
 
+- You can use `select` to suscribe a value of store
+- I recomend subscribe in `useEffect`
+
+```jsx
+//suscribe to value
+const mySubscription = select('isLoading').subscribe((value) => {
+  console.log(`value isLoading change to ${value}`);
+});
+
+//unsuscribe
+mySubscription.unsubscribe();
+```
+
 - You can use `dispatch` to execute acction and pass a payload;
 
 ```jsx
