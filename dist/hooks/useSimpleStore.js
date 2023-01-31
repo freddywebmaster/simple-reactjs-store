@@ -27,14 +27,14 @@ function useSimpleStore(slice, config) {
             }
             try {
                 rootCtx.root({
-                    type: "UPDATE_STORE",
+                    type: 'UPDATE_STORE',
                     payload: {
                         [slice.slice.name]: data,
                     },
                 });
             }
             catch (error) {
-                alert("SimpleReactStore: Plase set a GlobalProvider!");
+                alert('SimpleReactStore: Plase set a GlobalProvider!');
             }
         });
         if (!rootCtx.mounted.includes(slice.slice.name)) {
@@ -46,6 +46,7 @@ function useSimpleStore(slice, config) {
         data: useCache ? cache : state,
         dispatch: slice.store.dispatch,
         asyncDispatch: slice.store.asyncDispatch,
+        select: slice.store.select,
     };
 }
 exports.useSimpleStore = useSimpleStore;
