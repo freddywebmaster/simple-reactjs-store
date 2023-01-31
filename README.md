@@ -194,7 +194,7 @@ const loadCategories = async () => {
 };
 ```
 
-## Basic Example
+## Basic Full Example
 
 ```jsx
 import { useSimpleStore } from 'simple-reactjs-store';
@@ -232,4 +232,45 @@ const ProductList = () => {
 };
 
 export default ProductList;
+```
+
+# Custom Use - (Another way to use)
+
+make use of as follows if you don't want to use cache on localStorage and also don't want to use ContextDevTools
+
+- `why should` i do it like this?
+  In this way we have more flexibility and management of the state
+
+`advantages`
+
+1. own hooks
+2. full state control
+3. dont need use `GlobalProvider` of this library
+4. you can manage subscriptions as you like
+
+- `disadvantages`
+
+1. local storage cache not found you need set manualy
+2. Context devTools not work
+3. you spend more time
+
+```jsx
+import { mySlice } from 'store/mySlice';
+
+const { store, slice } = mySlice;
+
+const [myState, setMyState] = useState(slice.initialstate);
+
+//dispatching to store
+const saveNewValue = store.dispatch({ type: 'ADD', payload: 'Hello world' });
+
+useEffect(() => {
+  //suscription to store
+  const subs = store.subscribe((data) => {
+    setMyState(data);
+  });
+
+  //unsubscribe when the component unmount
+  return () => subs.unsubscribe();
+}, []);
 ```
